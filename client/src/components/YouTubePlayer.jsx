@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import VoiceSearch from './VoiceSearch';
 
 const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
@@ -44,7 +45,7 @@ const YouTubePlayer = () => {
   const [error, setError] = useState(null);
   const carouselRef = useRef(null);
 
-  // Logger utility for consistent logging format
+  // Logger utility
   const logger = {
     info: (message, data = null) => {
       const timestamp = new Date().toISOString();
@@ -127,6 +128,14 @@ const YouTubePlayer = () => {
     }
   };
 
+  const handleVoiceTranscription = (transcript) => {
+    setSearchQuery(transcript);
+    searchYouTube(transcript);
+  };
+
+  const handleVoiceError = (error) => {
+    setError(error);
+  };
 
   return (
     <div style={{
@@ -175,6 +184,10 @@ const YouTubePlayer = () => {
               fontFamily: '"Comic Sans MS", cursive'
             }}
           />
+          <VoiceSearch 
+            onTranscriptionComplete={handleVoiceTranscription}
+            onError={handleVoiceError}
+          />
           <button 
             type="submit" 
             disabled={isLoading}
@@ -184,7 +197,10 @@ const YouTubePlayer = () => {
               border: 'none',
               borderRadius: '0.5rem',
               cursor: 'pointer',
-              transition: 'transform 0.2s'
+              transition: 'transform 0.2s',
+              ':hover': {
+                transform: 'scale(1.05)'
+              }
             }}
           >
             <SearchIcon />
@@ -204,12 +220,11 @@ const YouTubePlayer = () => {
         </div>
       )}
 
-      { searchResults.length > 0 && ( <div style={{
+      <div style={{
         backgroundColor: '#FFF0F5',
         padding: '1rem',
         borderRadius: '0.5rem',
-        marginBottom: '1rem',
-        position: 'relative'
+        marginBottom: '1rem'
       }}>
         <h2 style={{
           color: '#FF69B4',
@@ -252,7 +267,10 @@ const YouTubePlayer = () => {
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               gap: '1rem',
-              padding: '1rem 0'
+              padding: '1rem 0',
+              '::-webkit-scrollbar': {
+                display: 'none'
+              }
             }}
           >
             {searchResults.map((video) => (
@@ -332,7 +350,7 @@ const YouTubePlayer = () => {
             <ArrowIcon direction="right" />
           </button>
         </div>
-      </div> ) }
+      </div>
 
       <div style={{
         backgroundColor: '#FFF0F5',
