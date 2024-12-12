@@ -4,7 +4,7 @@ import { playSound, preloadSounds } from '../utils/playSound';
 import soundButtons from '../utils/soundData';
 import LoopEditor from './LoopEditor';
 
-const ICON_FILE_LOCATION = '/data/images/cat_icon.png';
+const ICON_FILE_LOCATION = '/assets/images/cat_icon.png';
 
 const KidsSoundboard = () => {
   const [selectedSounds, setSelectedSounds] = useState([]);

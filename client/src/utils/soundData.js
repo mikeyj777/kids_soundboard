@@ -1,4 +1,5 @@
-const DEFAULT_SOUND = '/data/sounds/drum/snare_drum/tr909-snare-drum-241413.wav';
+const SOUND_FOLDER = '/assets/sounds';
+const DEFAULT_SOUND = SOUND_FOLDER + '/drum/snare_drum/tr909-snare-drum-241413.wav';
 
 // const soundButtons = [
 //   { id: 1, label: '🥁 Drums', color: '#FFB6C1', source: '/data/sounds/drum/snare_drum/tr909-snare-drum-241413.wav' },
@@ -16,7 +17,7 @@ const soundButtons = [
     id: 1, 
     label: '🥁 Drums', 
     color: '#FFB6C1', 
-    source: '/data/sounds/drum/snare_drum/tr909-snare-drum-241413.wav',
+    source: SOUND_FOLDER + '/drum/snare_drum/tr909-snare-drum-241413.wav',
     defaultTempo: 1,
     baseInterval: 500,  // Half second base interval for drums
     category: 'percussion',
@@ -30,7 +31,7 @@ const soundButtons = [
     id: 6, 
     label: '👏 Clap', 
     color: '#FFA07A', 
-    source: 'data/sounds/clap/trimmed-tr808-clap-241405.wav',
+    source: SOUND_FOLDER + '/clap/trimmed-tr808-clap-241405.wav',
     defaultTempo: 1,
     baseInterval: 1000, // One second base interval for claps
     category: 'percussion',
@@ -44,7 +45,7 @@ const soundButtons = [
     id: 2, 
     label: '🎹 Piano', 
     color: '#98FB98', 
-    source: DEFAULT_SOUND,
+    source: SOUND_FOLDER + '/piano/piano-g-6200.wav',
     defaultTempo: 1,
     baseInterval: 2000, // Two second base interval for melodic instruments
     category: 'melodic',
@@ -84,9 +85,9 @@ const soundButtons = [
   },
   { 
     id: 5, 
-    label: '🎻 Violin', 
+    label: '💨 Fart', 
     color: '#F0E68C', 
-    source: DEFAULT_SOUND,
+    source: SOUND_FOLDER + '/other/fart-9-228245.mp3',
     defaultTempo: 1,
     baseInterval: 2000,
     category: 'melodic',
