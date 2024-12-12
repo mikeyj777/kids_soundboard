@@ -1,0 +1,102 @@
+/* Loop Editor Container Styles */
+.loop-editor {
+  padding: 1rem;
+  background-color: #FFF0F5;
+  border-radius: 0.5rem;
+}
+
+.editor-title {
+  color: #FF69B4;
+  margin: 0 0 1rem 0;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 1.5rem;
+}
+
+/* Track Components */
+.track-label {
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 1.2rem;
+  color: #FF69B4;
+  flex: 1;
+}
+
+.tempo-display {
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 1.1rem;
+  color: #FF69B4;
+  min-width: 3rem;
+  text-align: center;
+}
+
+/* Empty State Styling */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.empty-state p {
+  color: #FF69B4;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Animation for Active Tracks */
+.sound-track.playing {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 105, 180, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0);
+  }
+}
+
+/* Override track button styles for better visibility */
+.track-button {
+  font-family: 'Comic Sans MS', cursive;
+  font-weight: bold;
+  min-width: 80px;
+  transition: all 0.2s ease;
+}
+
+.track-button:hover {
+  transform: scale(1.05);
+}
+
+/* Enhance track controls visibility */
+.track-controls button {
+  transition: all 0.2s ease;
+  font-family: 'Comic Sans MS', cursive;
+  font-weight: bold;
+}
+
+.track-controls button:active {
+  transform: scale(0.95);
+}
+
+/* Make the layout more responsive */
+@media (max-width: 600px) {
+  .sound-track {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .track-controls {
+    justify-content: center;
+  }
+  
+  .track-label {
+    text-align: center;
+  }
+}

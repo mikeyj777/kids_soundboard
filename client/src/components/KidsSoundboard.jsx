@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import YouTubePlayer from './YouTubePlayer';
 import { playSound, preloadSounds } from '../utils/playSound';
 import soundButtons from '../utils/soundData';
+import LoopEditor from './LoopEditor';
 
 const ICON_FILE_LOCATION = '/data/images/cat_icon.png';
 
@@ -107,25 +108,7 @@ const KidsSoundboard = () => {
 
       {/* Sound Editor Section */}
       <div className="editor-container">
-        {/* Sound Tracks */}
-        <div className="sound-tracks">
-          {selectedSounds.map((sound, index) => (
-            <div key={index} className="sound-track">
-              <button 
-                className={`track-button ${sound.active ? 'active' : ''}`}
-                style={{ backgroundColor: sound.color }}
-                onClick={() => toggleActive(index)}
-              >
-                {sound.label}
-              </button>
-              <div className="track-controls">
-                <button onClick={() => adjustTempo(index, -0.1)}>-</button>
-                <span>{sound.tempo.toFixed(1)}x</span>
-                <button onClick={() => adjustTempo(index, 0.1)}>+</button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <LoopEditor sounds={selectedSounds} />
       </div>
 
     </div>
