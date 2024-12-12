@@ -44,8 +44,8 @@ const YouTubePlayer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const carouselRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(true);
 
-  // Logger utility
   const logger = {
     info: (message, data = null) => {
       const timestamp = new Date().toISOString();
@@ -138,243 +138,125 @@ const YouTubePlayer = () => {
   };
 
   return (
-    <div style={{
-      border: '1rem solid pink',
-      borderRadius: '1rem',
-      padding: '1rem',
-      backgroundColor: '#fff',
-      maxWidth: '1200px',
-      margin: '0 auto',
-      fontFamily: '"Comic Sans MS", cursive'
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1rem',
-        padding: '1rem',
-        backgroundColor: '#FFE4E1',
-        borderRadius: '0.5rem',
-        marginBottom: '1rem'
-      }}>
-        <h1 style={{
-          color: '#FF69B4',
-          margin: 0,
-          fontSize: '2rem'
-        }}>Kids YouTube Player! 🎵</h1>
-      </div>
+    <div className="collapsible-container">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`collapsible-toggle ${isOpen ? '' : 'closed'}`}
+      >
+        ▼
+      </button>
+      
+      <div className="youtube-player-container">
+        <div className={`collapsible-content ${isOpen ? 'open' : 'closed'}`}>
+          <form onSubmit={handleSearch} className="search-container">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              placeholder="What would you like to watch?"
+              className="search-input"
+            />
+            <VoiceSearch 
+              onTranscriptionComplete={handleVoiceTranscription}
+              onError={handleVoiceError}
+            />
+            <button 
+              type="submit" 
+              disabled={isLoading}
+              className="search-button"
+            >
+              <SearchIcon />
+            </button>
+          </form>
 
-      <form onSubmit={handleSearch}>
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          marginBottom: '1rem'
-        }}>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-            placeholder="What would you like to watch?"
-            style={{
-              flexGrow: 1,
-              padding: '0.5rem',
-              fontSize: '1.2rem',
-              borderRadius: '0.5rem',
-              border: '3px solid #FFB6C1',
-              outline: 'none',
-              fontFamily: '"Comic Sans MS", cursive'
-            }}
-          />
-          <VoiceSearch 
-            onTranscriptionComplete={handleVoiceTranscription}
-            onError={handleVoiceError}
-          />
-          <button 
-            type="submit" 
-            disabled={isLoading}
-            style={{
-              padding: '0.5rem',
-              backgroundColor: '#FF69B4',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              transition: 'transform 0.2s',
-              ':hover': {
-                transform: 'scale(1.05)'
-              }
-            }}
-          >
-            <SearchIcon />
-          </button>
-        </div>
-      </form>
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
 
-      {error && (
-        <div style={{
-          padding: '1rem',
-          backgroundColor: '#FFE4E1',
-          color: '#FF1493',
-          borderRadius: '0.5rem',
-          marginBottom: '1rem'
-        }}>
-          {error}
-        </div>
-      )}
-
-      <div style={{
-        backgroundColor: '#FFF0F5',
-        padding: '1rem',
-        borderRadius: '0.5rem',
-        marginBottom: '1rem'
-      }}>
-        <h2 style={{
-          color: '#FF69B4',
-          fontSize: '1.5rem',
-          marginBottom: '1rem',
-          textAlign: 'center'
-        }}>
-          {isLoading ? 'Looking for fun videos...' : 'Fun Videos to Watch!'}
-        </h2>
-        
-        <div style={{ position: 'relative', padding: '0 40px' }}>
-          <button
-            onClick={() => scrollCarousel('left')}
-            style={{
-              position: 'absolute',
-              left: 0,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'rgba(255, 105, 180, 0.8)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '40px',
-              height: '40px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              zIndex: 1
-            }}
-          >
-            <ArrowIcon direction="left" />
-          </button>
-          
-          <div 
-            ref={carouselRef}
-            style={{
-              display: 'flex',
-              overflowX: 'auto',
-              scrollBehavior: 'smooth',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              gap: '1rem',
-              padding: '1rem 0',
-              '::-webkit-scrollbar': {
-                display: 'none'
-              }
-            }}
-          >
-            {searchResults.map((video) => (
-              <div
-                key={video.id}
-                onClick={() => handleVideoSelect(video)}
+          <div className="video-container">
+            <h2 className="results-title" style={{ textAlign: 'center' }}>
+              {isLoading ? 'Looking for fun videos...' : 'Fun Videos to Watch!'}
+            </h2>
+            
+            <div style={{ position: 'relative', padding: '0 40px' }}>
+              <button
+                onClick={() => scrollCarousel('left')}
+                className="search-button"
                 style={{
-                  flexShrink: 0,
-                  width: '280px',
-                  background: 'white',
-                  borderRadius: '0.5rem',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s',
-                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
+                  position: 'absolute',
+                  left: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255, 105, 180, 0.8)',
+                  width: '40px',
+                  height: '40px'
                 }}
               >
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  style={{
-                    width: '100%',
-                    borderTopLeftRadius: '0.5rem',
-                    borderTopRightRadius: '0.5rem'
-                  }}
-                />
-                <div style={{ padding: '0.5rem' }}>
-                  <p style={{
-                    color: '#FF69B4',
-                    fontWeight: 'bold',
-                    fontSize: '1rem',
-                    marginBottom: '0.5rem',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {video.title}
-                  </p>
-                  <p style={{
-                    color: '#666',
-                    fontSize: '0.9rem'
-                  }}>
-                    {video.channelTitle}
-                  </p>
-                </div>
+                <ArrowIcon direction="left" />
+              </button>
+              
+              <div 
+                ref={carouselRef}
+                className="results-grid"
+                style={{
+                  display: 'flex',
+                  overflowX: 'auto',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  '::-webkit-scrollbar': { display: 'none' }
+                }}
+              >
+                {searchResults.map((video) => (
+                  <div
+                    key={video.id}
+                    onClick={() => handleVideoSelect(video)}
+                    className="video-card"
+                    style={{ flexShrink: 0, width: '280px' }}
+                  >
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="video-thumbnail"
+                    />
+                    <div className="video-info">
+                      <p className="video-title">{video.title}</p>
+                      <p className="channel-title">{video.channelTitle}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+              
+              <button
+                onClick={() => scrollCarousel('right')}
+                className="search-button"
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255, 105, 180, 0.8)',
+                  width: '40px',
+                  height: '40px'
+                }}
+              >
+                <ArrowIcon direction="right" />
+              </button>
+            </div>
           </div>
-          
-          <button
-            onClick={() => scrollCarousel('right')}
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'rgba(255, 105, 180, 0.8)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '40px',
-              height: '40px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              zIndex: 1
-            }}
-          >
-            <ArrowIcon direction="right" />
-          </button>
-        </div>
-      </div>
 
-      <div style={{
-        backgroundColor: '#FFF0F5',
-        padding: '1rem',
-        borderRadius: '0.5rem',
-        marginBottom: '1rem'
-      }}>
-        <div style={{
-          aspectRatio: '16/9',
-          width: '100%',
-          marginBottom: '1rem'
-        }}>
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}`}
-            title="YouTube video player"
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: '0.5rem',
-              border: '3px solid pink'
-            }}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+          <div className="video-container">
+            <div className="video-frame-container">
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}`}
+                title="YouTube video player"
+                className="video-frame"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

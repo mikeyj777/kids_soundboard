@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import YouTubePlayer from './YouTubePlayer';
+import { playSound, preloadSounds } from '../utils/playSound';
+import soundButtons from '../utils/soundData';
+
+const ICON_FILE_LOCATION = '/data/images/cat_icon.png';
 
 const KidsSoundboard = () => {
   const [selectedSounds, setSelectedSounds] = useState([]);
   const [draggedSound, setDraggedSound] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const soundButtons = [
-    { id: 1, label: '🥁 Drums', color: '#FFB6C1' },
-    { id: 2, label: '🎹 Piano', color: '#98FB98' },
-    { id: 3, label: '🎸 Guitar', color: '#87CEEB' },
-    { id: 4, label: '🎺 Trumpet', color: '#DDA0DD' },
-    { id: 5, label: '🎻 Violin', color: '#F0E68C' },
-    { id: 6, label: '🎤 Voice', color: '#FFA07A' },
-  ];
-
-  const recommendedVideos = [
-    { id: 1, title: 'Baby Shark Dance', thumbnail: '/api/placeholder/160/90' },
-    { id: 2, title: 'Wheels on the Bus', thumbnail: '/api/placeholder/160/90' },
-    { id: 3, title: 'ABC Song', thumbnail: '/api/placeholder/160/90' },
-    { id: 4, title: 'Twinkle Twinkle', thumbnail: '/api/placeholder/160/90' },
-  ];
+    // Preload sounds when component mounts
+    useEffect(() => {
+      const loadSounds = async () => {
+        setIsLoading(true);
+        await preloadSounds(soundButtons);
+        setIsLoading(false);
+      };
+      loadSounds();
+    }, []);
 
   // ... (keeping the same handler functions)
   const handleDrop = (e) => {
@@ -51,7 +51,8 @@ const KidsSoundboard = () => {
       {/* Header with icon */}
       <div className="header">
         <img 
-          src="/api/placeholder/50/50" 
+          src={ ICON_FILE_LOCATION } 
+          width="100"
           alt="Music Kids Icon"
           className="app-icon"
         />
@@ -80,11 +81,18 @@ const KidsSoundboard = () => {
             <button
               key={sound.id}
               className="sound-button"
-              style={{ backgroundColor: sound.color }}
-              draggable
+              style={{ 
+                backgroundColor: sound.color,
+                opacity: isLoading ? 0.7 : 1,
+                cursor: isLoading ? 'wait' : 'pointer'
+              }}
+              draggable={!isLoading}
               onDragStart={() => setDraggedSound(sound)}
+              onClick={() => !isLoading && playSound(sound)}
+              disabled={isLoading}
             >
               {sound.label}
+              {isLoading && <span className="loading-indicator">⌛</span>}
             </button>
           ))}
         </div>
@@ -93,19 +101,8 @@ const KidsSoundboard = () => {
       {/* YouTube Section */}
       <div className="youtube-section">
         {/* YouTube Search Bar */}
-        <div className="youtube-search">
-          <div className="search-container">
-            <input 
-              type="text"
-              placeholder="Search for kids songs..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button className="voice-search">🎤</button>
-            <button className="search-button">🔍</button>
-          </div>
-        </div>
-
+        <YouTubePlayer />
+      </div>
         
 
       {/* Sound Editor Section */}
