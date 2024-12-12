@@ -100,3 +100,37 @@
     text-align: center;
   }
 }
+
+/* Add these to your existing CSS */
+
+.track-main-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.remove-button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background-color: #ffebf3;
+  color: #FF69B4;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #FF69B4;
+  color: white;
+  transform: scale(1.1);
+}
+
+.remove-button:active {
+  transform: scale(0.95);
+}

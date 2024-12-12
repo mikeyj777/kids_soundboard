@@ -11,23 +11,28 @@ const KidsSoundboard = () => {
   const [draggedSound, setDraggedSound] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-    // Preload sounds when component mounts
-    useEffect(() => {
-      const loadSounds = async () => {
-        setIsLoading(true);
-        await preloadSounds(soundButtons);
-        setIsLoading(false);
-      };
-      loadSounds();
-    }, []);
+  // Preload sounds when component mounts
+  useEffect(() => {
+    const loadSounds = async () => {
+      setIsLoading(true);
+      await preloadSounds(soundButtons);
+      setIsLoading(false);
+    };
+    loadSounds();
+  }, []);
 
-  // ... (keeping the same handler functions)
   const handleDrop = (e) => {
     e.preventDefault();
     if (draggedSound) {
-      setSelectedSounds([...selectedSounds, 
-        { ...draggedSound, tempo: 1, active: true }
-      ]);
+      // Add loop properties when adding a new sound
+      setSelectedSounds([...selectedSounds, {
+        ...draggedSound,
+        loop: {
+          active: false,
+          tempo: 1,
+          interval: null
+        }
+      }]);
     }
   };
 
@@ -35,15 +40,16 @@ const KidsSoundboard = () => {
     e.preventDefault();
   };
 
-  const adjustTempo = (index, delta) => {
+  // New method to update a specific sound in the selectedSounds array
+  const handleUpdateSound = (index, updatedSound) => {
     const newSounds = [...selectedSounds];
-    newSounds[index].tempo = Math.max(0.5, Math.min(2, newSounds[index].tempo + delta));
+    newSounds[index] = updatedSound;
     setSelectedSounds(newSounds);
   };
 
-  const toggleActive = (index) => {
-    const newSounds = [...selectedSounds];
-    newSounds[index].active = !newSounds[index].active;
+  // Optional: Method to remove a sound from the editor
+  const handleRemoveSound = (index) => {
+    const newSounds = selectedSounds.filter((_, i) => i !== index);
     setSelectedSounds(newSounds);
   };
 
@@ -52,7 +58,7 @@ const KidsSoundboard = () => {
       {/* Header with icon */}
       <div className="header">
         <img 
-          src={ ICON_FILE_LOCATION } 
+          src={ICON_FILE_LOCATION} 
           width="100"
           alt="Music Kids Icon"
           className="app-icon"
@@ -101,16 +107,17 @@ const KidsSoundboard = () => {
 
       {/* YouTube Section */}
       <div className="youtube-section">
-        {/* YouTube Search Bar */}
         <YouTubePlayer />
       </div>
-        
 
       {/* Sound Editor Section */}
       <div className="editor-container">
-        <LoopEditor sounds={selectedSounds} />
+        <LoopEditor 
+          sounds={selectedSounds}
+          onUpdateSound={handleUpdateSound}
+          onRemoveSound={handleRemoveSound} // Optional removal functionality
+        />
       </div>
-
     </div>
   );
 };
