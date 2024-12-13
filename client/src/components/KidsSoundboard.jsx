@@ -68,20 +68,6 @@ const KidsSoundboard = () => {
 
       {/* Sound Buttons Section with Drop Target */}
       <div className="sound-section">
-        {/* Vertical Drop Target */}
-        <div 
-          className="drop-target"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-        >
-          <div className="drop-target-content">
-            <span>Drop</span>
-            <span>Sounds</span>
-            <span>Here!</span>
-            <span>🎵</span>
-          </div>
-        </div>
-
         {/* Sound Buttons Panel */}
         <div className="sound-buttons-panel">
           {soundButtons.map((sound) => (
@@ -102,6 +88,20 @@ const KidsSoundboard = () => {
               {isLoading && <span className="loading-indicator">⌛</span>}
             </button>
           ))}
+        </div>
+                
+        {/* Drop Target */}
+        <div 
+          className="drop-target"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
+          <div className="drop-target-content">
+            <span>Drop</span>
+            <span>Sounds</span>
+            <span>Here!</span>
+            <span>🎵</span>
+          </div>
         </div>
       </div>
 
